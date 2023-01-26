@@ -13,7 +13,7 @@ export class UserService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return {username: String, password:String};
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

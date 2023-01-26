@@ -1,0 +1,20 @@
+version: "3.9"
+services:
+  psql_db:
+    container_name: senac_security_exercise
+    image: postgres:14
+    volumes:
+      - psql-db-data:/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=senac_security_exercise
+    ports:
+      - 5432:5432
+
+volumes:
+  psql-db-data:
+
+networks:
+  app-connect:
+    driver: bridge
