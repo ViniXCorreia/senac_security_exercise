@@ -1,4 +1,4 @@
-import { MessageEntity } from 'src/messages/entities/message.entity';
+import { MessageEntity } from 'src/database/entities/message.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'user' })
@@ -15,10 +15,10 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @Column()
+  @Column({nullable: true})
   publicKey: string;
 
-  @Column()
+  @Column({nullable: true})
   privateKey: string;
 
   @OneToMany(() => MessageEntity, (message)=> message.sentUser)
