@@ -57,6 +57,14 @@ export class CryptoService {
         return signedContentB64;
     }
 
+    rsaSignVerify(publicKeyLiteral: string, contentHash: string, originalContent: string){
+        const NodeRSA = require('node-rsa')
+        const rsaKey = new NodeRSA(publicKeyLiteral);
+        const checkSign = rsaKey.verify(originalContent, Buffer.from(contentHash, 'base64'));
+        console.log(checkSign);
+        return checkSign;
+    }
+
     aesEncrypt(text: string, userPassword: string){
         const crypto = require('crypto');
         const algorithm = 'aes-256-cbc';

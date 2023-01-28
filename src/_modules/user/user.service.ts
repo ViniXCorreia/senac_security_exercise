@@ -32,15 +32,13 @@ export class UserService {
     const objJsonB64 = Buffer.from(objJsonStr).toString('base64')
     createUserDto.privateKey = objJsonB64;
     await this.userRepository.save(createUserDto)
-    return true
+    return {
+      success: true,
+      message: 'Úsuario Criado'
+    }
   }
 
-  async findAll(usuario: any) {
-    // const text = 'textao';
-    // const textEncrypt = this.cryptoService.rsaEncrypt(usuario.privateKey, text);
-    // console.log(textEncrypt)
-    // const decryptText = this.cryptoService.rsaDecrypt(usuario.privateKey, textEncrypt);
-    // console.log(decryptText);
+  async findAll() {
     return await this.userRepository.find();
   }
 

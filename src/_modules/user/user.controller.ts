@@ -6,6 +6,7 @@ import { LoginDto } from './dto/login.dto';
 import { MessagesService } from './messages.service';
 import { UserEntity } from 'src/database/entities/user.entity';
 import { SentMessageDto } from './dto/sent-message.dto';
+import { CheckSignDto } from './dto/check-sign.dto';
 
 @Controller()
 export class UserController {
@@ -34,9 +35,17 @@ export class UserController {
     return await this.messageService.sentMessage(sentMessageDto, this.global)
   }
 
+  @Post('/user/chek-sign')
+  async checkSign(@Body() checkSignDto: CheckSignDto){
+    if(this.global === null){
+      return "Usuário não Logado"
+    }
+    return await this.messageService.checkSign(checkSignDto, this.global)
+  }
+
   @Get('/users')
   async findAll() {
-    return await this.userService.findAll(this.global);
+    return await this.userService.findAll();
   }
   
   @Get('/user/messages')
@@ -44,7 +53,7 @@ export class UserController {
     if(this.global === null){
       return "Usuário não Logado"
     }
-    return await this.messageService.findAllByUser(+this.global.id);
+    return await this.messageService.findAllByUser(this.global);
   }
 
   @Get('/user/:id')

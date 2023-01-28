@@ -5,6 +5,7 @@ import { RepositoryProxyModule } from 'src/database/proxy/repository.proxy.modul
 import { text } from 'stream/consumers';
 import { Repository } from 'typeorm';
 import { CryptoService } from '../crypto/crypto.service';
+import { CheckSignDto } from './dto/check-sign.dto';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { SentMessageDto } from './dto/sent-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -22,8 +23,14 @@ export class MessagesService {
     return 'This action adds a new message';
   }
 
-  findAllByUser(id: number) {
-    return `This action returns all messages`;
+  async findAllByUser(user: UserEntity) {
+    const messages = await this.messageRepository.find({where: {receiveUser: {id: user.id}}});
+    let decryptedMessages: string[] = [];
+    for(const message of messages){
+      let textMessage = this.cryptoService.rsaDecryptWithPrivate(user.privateKey, message.contentHash);
+      decryptedMessages.push(textMessage)
+    }
+    return decryptedMessages;
   }
 
   findOne(id: number) {
@@ -51,6 +58,14 @@ export class MessagesService {
       receiveUser: receiveUser,
       sign: signedMessage
     })
-    return true;
+    return {
+      success: true,
+      message: 'Mensagem Enviada'
+    };
+  }
+
+  async checkSign(checkSignDto: CheckSignDto, user: UserEntity){
+    // const verify = this.cryptoService.rsaSignVerify(checkSignDto.senderPublicKey, checkSignDto.contentHash,)
+    // TODO finalizar implementação da verificação da assinatura da mensagem.
   }
 }
