@@ -11,13 +11,13 @@ export class AuthService {
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.userService.findByUsername(username);
-    const hashPassword = this.cryptoService.hasher256(pass);
+    const hashPassword = await this.cryptoService.hasher256(pass);
     if (user && user.password === hashPassword) {
-      const objJsonStr = Buffer.from(user.privateKey, 'base64')
-      const objDecoded = JSON.parse(objJsonStr.toString())
-      console.log(objDecoded)
-      user.privateKey = await this.cryptoService.aesDecrypt(objDecoded.iv, objDecoded.encryptedData, pass).toString()
-      // const decryptedAesPrivateKey = this.cryptoService.aesDecrypt()
+      const objJsonStr = Buffer.from(user.privateKey, 'base64');
+      const objDecoded = JSON.parse(objJsonStr.toString());
+      const privateKeyLiteral = this.cryptoService.aesDecrypt(objDecoded.iv, objDecoded.encryptedData, pass).toString();
+      // const rsaKeysLogin = await this.cryptoService.rsaKeysLogin(privateKeyLiteral);
+      user.privateKey = privateKeyLiteral
       return user;
     }
     return null;

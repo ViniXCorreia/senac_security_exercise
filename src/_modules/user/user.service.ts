@@ -25,7 +25,7 @@ export class UserService {
   async create(createUserDto: CreateUserDto) {
     const originalPassword = createUserDto.password;
     createUserDto.password = this.cryptoService.hasher256(originalPassword);
-    const rsakeys = this.cryptoService.rsaKeys();
+    const rsakeys = this.cryptoService.rsaKeysGenerate();
     createUserDto.publicKey = rsakeys.publicKey;
     let privateKeyAesEncrypted = this.cryptoService.aesEncrypt(rsakeys.privateKey, originalPassword)
     const objJsonStr = JSON.stringify(privateKeyAesEncrypted);
@@ -35,8 +35,13 @@ export class UserService {
     return true
   }
 
-  async findAll() {
-    return await this.userRepository.find();
+  async findAll(usuario: any) {
+    const text = 'textao';
+    const textEncrypt = this.cryptoService.rsaEncrypt(usuario.privateKey, text);
+    console.log(textEncrypt)
+    const decryptText = this.cryptoService.rsaDecrypt(usuario.privateKey, textEncrypt);
+    console.log(decryptText);
+    // return await this.userRepository.find();
   }
 
   async findOne(id: number) {

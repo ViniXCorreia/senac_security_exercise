@@ -11,12 +11,34 @@ export class CryptoService {
 		return hashPassword;
     }
 
-    rsaKeys(){
+    rsaKeysGenerate(){
         const NodeRSA = require('node-rsa')
         let rsaKey = new NodeRSA({b:512})
-        const privateKey = rsaKey.exportKey("pkcs8-private");//"private"
-        const publicKey = rsaKey.exportKey("pkcs8-public");//"public"
-        return{privateKey, publicKey};
+        const privateKey = rsaKey.exportKey("pkcs8-private");
+        const publicKey = rsaKey.exportKey("pkcs8-public");
+        return {privateKey, publicKey};
+    }
+
+    async rsaKeysLogin(privateKeyLiteral: string){
+        const NodeRSA = require('node-rsa')
+        const rsaKey = new NodeRSA(privateKeyLiteral);
+        return rsaKey;
+    }
+
+    rsaEncrypt(privateKeyLiteral: any, text: string){
+        const NodeRSA = require('node-rsa')
+        const rsaKey = new NodeRSA(privateKeyLiteral);
+        const encrypted = rsaKey.encrypt(text);
+        const encryptB64 = encrypted.toString('base64');
+        return encryptB64;
+    }
+
+    rsaDecrypt(privateKeyLiteral: any, text:string){
+        const NodeRSA = require('node-rsa')
+        const rsaKey = new NodeRSA(privateKeyLiteral);
+        const textDecode = Buffer.from(text, 'base64');
+        const decrypted = rsaKey.decrypt(textDecode);
+        return decrypted.toString('utf-8')
     }
 
     aesEncrypt(text: string, userPassword: string){
