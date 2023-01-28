@@ -3,6 +3,7 @@ import { UserEntity } from 'src/database/entities/user.entity';
 import { RepositoryProxyModule } from 'src/database/proxy/repository.proxy.module';
 import { Repository } from 'typeorm';
 import { AuthService } from '../auth/auth.service';
+import { CryptoService } from '../crypto/crypto.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -13,6 +14,7 @@ export class UserService {
     @Inject(RepositoryProxyModule.USER_REPOSITORY)
     private readonly userRepository: Repository<UserEntity>,
     private readonly authService: AuthService,
+    private readonly cryptoService: CryptoService,
   ){}
 
   async login(loginDto: LoginDto){
@@ -21,6 +23,14 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto) {
+    const originalPassword = createUserDto.password;
+    createUserDto.password = this.cryptoService.hasher256(originalPassword);
+    const rsakeys = this.cryptoService.rsaKeys();
+    createUserDto.publicKey = rsakeys.publicKey;
+    let privateKeyAesEncrypted = this.cryptoService.aesEncrypt(rsakeys.privateKey, originalPassword)
+    const objJsonStr = JSON.stringify(privateKeyAesEncrypted);
+    const objJsonB64 = Buffer.from(objJsonStr).toString('base64')
+    createUserDto.privateKey = objJsonB64;
     await this.userRepository.save(createUserDto)
     return true
   }
