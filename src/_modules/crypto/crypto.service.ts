@@ -25,7 +25,7 @@ export class CryptoService {
         return rsaKey;
     }
 
-    rsaEncrypt(privateKeyLiteral: any, text: string){
+    rsaEncryptWithPrivate(privateKeyLiteral: any, text: string){
         const NodeRSA = require('node-rsa')
         const rsaKey = new NodeRSA(privateKeyLiteral);
         const encrypted = rsaKey.encrypt(text);
@@ -33,12 +33,28 @@ export class CryptoService {
         return encryptB64;
     }
 
-    rsaDecrypt(privateKeyLiteral: any, text:string){
+    rsaDecryptWithPrivate(privateKeyLiteral: any, text:string){
         const NodeRSA = require('node-rsa')
         const rsaKey = new NodeRSA(privateKeyLiteral);
         const textDecode = Buffer.from(text, 'base64');
         const decrypted = rsaKey.decrypt(textDecode);
         return decrypted.toString('utf-8')
+    }
+
+    rsaEncryptWithPublic(publicKeyLiteral: any, text: string){
+        const NodeRSA = require('node-rsa')
+        const rsaKey = new NodeRSA(publicKeyLiteral);
+        const encrypted = rsaKey.encrypt(text);
+        const encryptB64 = encrypted.toString('base64');
+        return encryptB64;
+    }
+
+    rsaSign(privateKeyLiteral: string, text: string){
+        const NodeRSA = require('node-rsa')
+        const rsaKey = new NodeRSA(privateKeyLiteral);
+        let signedContent = rsaKey.sign(text);
+        const signedContentB64 = signedContent.toString('base64');
+        return signedContentB64;
     }
 
     aesEncrypt(text: string, userPassword: string){

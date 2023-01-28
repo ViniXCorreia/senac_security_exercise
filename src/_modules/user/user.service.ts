@@ -36,12 +36,12 @@ export class UserService {
   }
 
   async findAll(usuario: any) {
-    const text = 'textao';
-    const textEncrypt = this.cryptoService.rsaEncrypt(usuario.privateKey, text);
-    console.log(textEncrypt)
-    const decryptText = this.cryptoService.rsaDecrypt(usuario.privateKey, textEncrypt);
-    console.log(decryptText);
-    // return await this.userRepository.find();
+    // const text = 'textao';
+    // const textEncrypt = this.cryptoService.rsaEncrypt(usuario.privateKey, text);
+    // console.log(textEncrypt)
+    // const decryptText = this.cryptoService.rsaDecrypt(usuario.privateKey, textEncrypt);
+    // console.log(decryptText);
+    return await this.userRepository.find();
   }
 
   async findOne(id: number) {
@@ -59,5 +59,10 @@ export class UserService {
   async remove(id: number) {
     await this.userRepository.delete(id);
     return true
+  }
+
+  async findUserByPublicKey(publicKey: string){
+    const user =await  this.userRepository.findOne({where: { publicKey: publicKey}});
+    return user;
   }
 }

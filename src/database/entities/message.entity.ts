@@ -4,10 +4,7 @@ import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Re
 
 @Entity({name: 'message'})
 export class MessageEntity {
-    constructor(
-        @InjectRepository(UserEntity)
-        private readonly userRepository: Repository<UserEntity>
-    ){}
+
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -19,6 +16,9 @@ export class MessageEntity {
 
     @CreateDateColumn()
     createdAt: Date;
+
+    @Column({nullable: true})
+    sign: string;
 
     @ManyToOne(() => UserEntity, (user) => user.messagesSent)
     sentUser: UserEntity;
