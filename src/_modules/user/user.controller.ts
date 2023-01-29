@@ -56,9 +56,9 @@ export class UserController {
     return await this.messageService.findAllByUser(this.global);
   }
 
-  @Get('/user/:id')
-  async findOne(@Param('id') id: number) {
-    return await this.userService.findOne(id);
+  @Get('/user/:name')
+  async findOne(@Param('name') name: string) {
+    return await this.userService.findByUsername(name);
   }
 
 

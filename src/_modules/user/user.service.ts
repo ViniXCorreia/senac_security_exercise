@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { UserEntity } from 'src/database/entities/user.entity';
 import { RepositoryProxyModule } from 'src/database/proxy/repository.proxy.module';
 import { Repository } from 'typeorm';
@@ -61,6 +61,9 @@ export class UserService {
 
   async findUserByPublicKey(publicKey: string){
     const user =await  this.userRepository.findOne({where: { publicKey: publicKey}});
+    if(user === null){
+      throw new NotFoundException("Usuário não encontrado")
+    }
     return user;
   }
 }

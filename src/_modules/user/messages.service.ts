@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { MessageEntity } from 'src/database/entities/message.entity';
 import { UserEntity } from 'src/database/entities/user.entity';
 import { RepositoryProxyModule } from 'src/database/proxy/repository.proxy.module';
@@ -34,7 +34,11 @@ export class MessagesService {
   }
 
   async findOneByContentHash(hash: string) {
-    return await this.messageRepository.findOne({where: {sign: hash}});
+    const content= await this.messageRepository.findOne({where: {sign: hash}});
+    if(content === null){
+      throw new NotFoundException('Assinatura não encontrada');
+    }
+    return content;
   }
 
   update(id: number, updateMessageDto: UpdateMessageDto) {
