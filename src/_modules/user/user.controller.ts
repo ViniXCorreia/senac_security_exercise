@@ -35,7 +35,7 @@ export class UserController {
     return await this.messageService.sentMessage(sentMessageDto, this.global)
   }
 
-  @Post('/user/chek-sign')
+  @Post('/user/check-sign')
   async checkSign(@Body() checkSignDto: CheckSignDto){
     if(this.global === null){
       return "Usuário não Logado"

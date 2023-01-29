@@ -16,10 +16,9 @@ export class AuthService {
       const objJsonStr = Buffer.from(user.privateKey, 'base64');
       const objDecoded = JSON.parse(objJsonStr.toString());
       const privateKeyLiteral = this.cryptoService.aesDecrypt(objDecoded.iv, objDecoded.encryptedData, pass).toString();
-      // const rsaKeysLogin = await this.cryptoService.rsaKeysLogin(privateKeyLiteral);
       user.privateKey = privateKeyLiteral
       return user;
     }
-    return null;
+    return 'Erro ao realizar o login';
   }
 }

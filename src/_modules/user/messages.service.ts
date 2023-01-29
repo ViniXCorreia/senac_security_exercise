@@ -33,8 +33,8 @@ export class MessagesService {
     return decryptedMessages;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} message`;
+  async findOneByContentHash(hash: string) {
+    return await this.messageRepository.findOne({where: {sign: hash}});
   }
 
   update(id: number, updateMessageDto: UpdateMessageDto) {
@@ -65,7 +65,8 @@ export class MessagesService {
   }
 
   async checkSign(checkSignDto: CheckSignDto, user: UserEntity){
-    // const verify = this.cryptoService.rsaSignVerify(checkSignDto.senderPublicKey, checkSignDto.contentHash,)
-    // TODO finalizar implementação da verificação da assinatura da mensagem.
+    const getOrignalContent = await this.findOneByContentHash(checkSignDto.contentHash);
+    const verify = this.cryptoService.rsaSignVerify(checkSignDto.senderPublicKey, checkSignDto.contentHash, getOrignalContent.originalContent);
+    return verify;
   }
 }

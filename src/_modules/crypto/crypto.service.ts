@@ -61,7 +61,6 @@ export class CryptoService {
         const NodeRSA = require('node-rsa')
         const rsaKey = new NodeRSA(publicKeyLiteral);
         const checkSign = rsaKey.verify(originalContent, Buffer.from(contentHash, 'base64'));
-        console.log(checkSign);
         return checkSign;
     }
 
