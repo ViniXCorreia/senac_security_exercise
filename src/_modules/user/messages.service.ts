@@ -2,7 +2,6 @@ import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { MessageEntity } from 'src/database/entities/message.entity';
 import { UserEntity } from 'src/database/entities/user.entity';
 import { RepositoryProxyModule } from 'src/database/proxy/repository.proxy.module';
-import { text } from 'stream/consumers';
 import { Repository } from 'typeorm';
 import { CryptoService } from '../crypto/crypto.service';
 import { CheckSignDto } from './dto/check-sign.dto';
