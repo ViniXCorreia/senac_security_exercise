@@ -5,5 +5,5 @@ export class CheckSignDto{
     senderPublicKey: string;
 
     @IsString()
-    contentHash: string;
+    sign: string;
 }

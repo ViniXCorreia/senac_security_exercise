@@ -69,8 +69,8 @@ export class MessagesService {
   }
 
   async checkSign(checkSignDto: CheckSignDto, user: UserEntity){
-    const getOrignalContent = await this.findOneByContentHash(checkSignDto.contentHash);
-    const verify = this.cryptoService.rsaSignVerify(checkSignDto.senderPublicKey, checkSignDto.contentHash, getOrignalContent.originalContent);
+    const getOrignalContent = await this.findOneByContentHash(checkSignDto.sign );
+    const verify = this.cryptoService.rsaSignVerify(checkSignDto.senderPublicKey, checkSignDto.sign , getOrignalContent.originalContent);
     return verify;
   }
 }

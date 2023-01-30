@@ -57,10 +57,10 @@ export class CryptoService {
         return signedContentB64;
     }
 
-    rsaSignVerify(publicKeyLiteral: string, contentHash: string, originalContent: string){
+    rsaSignVerify(publicKeyLiteral: string, sign: string, originalContent: string){
         const NodeRSA = require('node-rsa')
         const rsaKey = new NodeRSA(publicKeyLiteral);
-        const checkSign = rsaKey.verify(originalContent, Buffer.from(contentHash, 'base64'));
+        const checkSign = rsaKey.verify(originalContent, Buffer.from(sign, 'base64'));
         return checkSign;
     }
 
