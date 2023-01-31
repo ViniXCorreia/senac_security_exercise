@@ -19,12 +19,6 @@ export class CryptoService {
         return {privateKey, publicKey};
     }
 
-    async rsaKeysLogin(privateKeyLiteral: string){
-        const NodeRSA = require('node-rsa')
-        const rsaKey = new NodeRSA(privateKeyLiteral);
-        return rsaKey;
-    }
-
     rsaEncryptWithPrivate(privateKeyLiteral: any, text: string){
         const NodeRSA = require('node-rsa')
         const rsaKey = new NodeRSA(privateKeyLiteral);

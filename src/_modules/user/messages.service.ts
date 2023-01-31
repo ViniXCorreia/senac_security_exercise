@@ -18,9 +18,6 @@ export class MessagesService {
     private readonly userService: UserService,
     private readonly cryptoService: CryptoService,
   ){}
-  create(createMessageDto: CreateMessageDto) {
-    return 'This action adds a new message';
-  }
 
   async findAllByUser(user: UserEntity) {
     const messages = await this.messageRepository.find({where: {receiveUser: {id: user.id}}});
@@ -38,14 +35,6 @@ export class MessagesService {
       throw new NotFoundException('Assinatura não encontrada');
     }
     return content;
-  }
-
-  update(id: number, updateMessageDto: UpdateMessageDto) {
-    return `This action updates a #${id} message`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} message`;
   }
 
   async sentMessage(sentMessageDto: SentMessageDto, sentUser: UserEntity){
@@ -68,8 +57,9 @@ export class MessagesService {
   }
 
   async checkSign(checkSignDto: CheckSignDto, user: UserEntity){
-    const getOrignalContent = await this.findOneByContentHash(checkSignDto.sign );
-    const verify = this.cryptoService.rsaSignVerify(checkSignDto.senderPublicKey, checkSignDto.sign , getOrignalContent.originalContent);
+    const getOrignalContent = await this.findOneByContentHash(checkSignDto.sign);
+    const originalContent = this.cryptoService.rsaDecryptWithPrivate(user.privateKey, getOrignalContent.contentHash);
+    const verify = this.cryptoService.rsaSignVerify(checkSignDto.senderPublicKey, checkSignDto.sign , originalContent);
     return verify;
   }
 }

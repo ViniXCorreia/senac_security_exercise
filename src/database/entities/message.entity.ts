@@ -9,9 +9,6 @@ export class MessageEntity {
     id: number;
 
     @Column()
-    originalContent: string;
-
-    @Column()
     contentHash: string;
 
     @CreateDateColumn()
