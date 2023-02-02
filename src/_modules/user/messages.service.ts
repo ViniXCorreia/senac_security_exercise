@@ -5,9 +5,7 @@ import { RepositoryProxyModule } from 'src/database/proxy/repository.proxy.modul
 import { Repository } from 'typeorm';
 import { CryptoService } from '../crypto/crypto.service';
 import { CheckSignDto } from './dto/check-sign.dto';
-import { CreateMessageDto } from './dto/create-message.dto';
 import { SentMessageDto } from './dto/sent-message.dto';
-import { UpdateMessageDto } from './dto/update-message.dto';
 import { UserService } from './user.service';
 
 @Injectable()
